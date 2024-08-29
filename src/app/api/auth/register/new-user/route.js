@@ -1,4 +1,5 @@
 import connectDB from "@/lib/connectDB";
+import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
     try {
@@ -6,9 +7,20 @@ export const POST = async (request) => {
         const userCollection = db.collection('users');
         const newUser = await request.json();
         const res = await userCollection.insertOne(newUser);
-        return Response.json({message: "new user created"});
+        return new NextResponse(JSON.stringify({ message: "New user created", userId: res.insertedId }), {
+            status: 201,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
     } catch (error) {
-        return Response.json({message: "something went wrong"})
+        console.error('Error creating user:', error);
+        return new NextResponse(JSON.stringify({ message: "Something went wrong" }), {
+            status: 500,
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
     }
 }

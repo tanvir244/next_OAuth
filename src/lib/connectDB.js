@@ -3,7 +3,7 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 let db;
 
 const connectDB = async () => {
-    if(db) return db;
+    if (db) return db;
     try {
         const uri = process.env.NEXT_PUBLIC_MONGO_URI;
         const client = new MongoClient(uri, {
@@ -16,8 +16,9 @@ const connectDB = async () => {
         db = client.db('next-hero');
         return db;
     } catch (error) {
-        console.log(error);
+        console.log('Database connection error:', error);
     }
 }
 
 export default connectDB;
+
